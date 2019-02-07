@@ -25,9 +25,9 @@ run_command('sudo apt-get update')
 
 print('dependencies are being installed...', end='\r')
 if OS == 'debian':
-    run_command('sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common')
+    run_command('sudo apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common')
 elif OS == 'ubuntu':
-    run_command('sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common')
+    run_command('sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common')
 
 run_command('curl -fsSL https://download.docker.com/linux/{}/gpg | sudo apt-key add -'.format(OS))
 
@@ -40,7 +40,7 @@ else:
 
 print('docker is finally being installed...', end='\r')
 run_command('sudo apt-get update')
-run_command('sudo apt-get install docker-ce docker-ce-cli containerd.io')
+run_command('sudo apt-get install -y docker-ce docker-ce-cli containerd.io')
 print('permissions are being updating...', end='\r')
 run_command('sudo groupadd docker')
 run_command('sudo usermod -aG docker $USER')
