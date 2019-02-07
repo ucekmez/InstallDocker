@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import os, subprocess, sys
+import os, subprocess, sys, getpass
 
 def run_command(command):
     if sys.version_info[0] < 3: # python 2x
@@ -43,5 +43,5 @@ run_command('sudo apt-get update')
 run_command('sudo apt-get install -y docker-ce docker-ce-cli containerd.io')
 print('permissions are being updating...', end='\r')
 run_command('sudo groupadd docker')
-run_command('sudo usermod -aG docker $USER')
+run_command('sudo usermod -aG docker {}'.format(getpass.getuser()))
 run_command('docker run hello-world')
