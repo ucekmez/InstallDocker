@@ -15,10 +15,15 @@ OS           = run_command("lsb_release -is").replace("\n", "").lower()
 # OS version # cosmic, bionic, stretch, etc...
 CODENAME     = run_command("lsb_release -cs").replace("\n", "")
 
+print ("arch: {}\nOS: {}\ncodename: {}".format(architecture, OS, CODENAME))
 
+print('previous installations are being removed...', end='\r')
 run_command('sudo apt-get remove docker docker-engine docker.io containerd runc')
+
+print('system is being updated...', end='\r')
 run_command('sudo apt-get update')
 
+print('dependencies are being installed...', end='\r')
 if OS == 'debian':
     run_command('sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common')
 elif OS == 'ubuntu':
@@ -26,13 +31,17 @@ elif OS == 'ubuntu':
 
 run_command('curl -fsSL https://download.docker.com/linux/{}/gpg | sudo apt-key add -'.format(OS))
 
+print('repository is being added...', end='\r')
 if architecture in ['x86_64', 'amd64']:
     run_command('sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/{} {} stable"'.format(OS, CODENAME))
 else:
     run_command('sudo add-apt-repository "deb [arch={}] https://download.docker.com/linux/{} {} stable"'.format(architecture, OS, CODENAME))
 
+
+print('docker is finally being installed...', end='\r')
 run_command('sudo apt-get update')
 run_command('sudo apt-get install docker-ce docker-ce-cli containerd.io')
+print('permissions are being updating...', end='\r')
 run_command('sudo groupadd docker')
 run_command('sudo usermod -aG docker $USER')
 run_command('docker run hello-world')
