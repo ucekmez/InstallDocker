@@ -2,7 +2,7 @@
 
 ##usage: 
 
-sudo python install.py 
+sudo ./run.sh 
 
 ## notes 
 
