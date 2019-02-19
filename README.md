@@ -1,9 +1,9 @@
 # InstallDocker
 
-##usage: 
+##usage:
 
-sudo ./run.sh 
+sudo ./install-docker.sh
 
-## notes 
+## notes
 
 with this script, Docker engine can be installed on any Ubuntu and Debian

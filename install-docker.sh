@@ -45,6 +45,10 @@ sudo groupadd docker
 sudo usermod -aG docker $USER
 rm -rf docker
 
+# make docker a service again!
+sudo cp docker.service /etc/systemd/system/docker.service
+sudo systemctl enable docker && sudo systemctl start docker
+
 clear
 echo "docker system has been installed successfully"
 
