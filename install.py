@@ -34,6 +34,9 @@ def download_url(url, file_name):
                                  miniters=1, desc=url.split('/')[-1]) as t:
             urllib.request.urlretrieve(url, filename=output_path, reporthook=t.update_to)
 
+    download(url, file_name)
+
+    print("\ndownload completed!\n")
 
 #######################  docker version to be installed
 DOCKER_VERSION = "18.06.2"
