@@ -81,6 +81,7 @@ if [ "$#" -ge 1 ] && [ "$1" = "-r" ]; then
   tar xzvf 'src/docker-'"$ARCH"'.tgz' --directory "$PWD/bundle"
   cp 'src/docker-compose-'"$ARCH" bundle/docker/docker-compose
   cp docker.service bundle/docker.service
+  cp manage-device bundle/manage-docker
   cp install bundle/install
   tar -zcvf bundle.tar.gz bundle
   rm -rf bundle
