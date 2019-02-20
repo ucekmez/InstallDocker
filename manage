@@ -1,0 +1,43 @@
+#!/bin/bash
+
+DOCKER_REGISTRY="repo.acip.io"
+COMMAND="$1"
+
+if [ "$#" -lt 1 ]; then
+  echo "
+  usage:
+    ./manage login username password  [logs you in to $DOCKER_REGISTRY]
+    ./manage images                   [lists locally available images]
+    ./manage push image_label         [pushes image_label to $DOCKER_REGISTRY]
+    ./manage pull image_label         [pulls and saves image_label from $DOCKER_REGISTRY]
+  "
+else
+  if [ $1 = "login" ]; then
+    USERNAME=$2
+    PASSWORD=$3
+    docker login -u $USERNAME -p $PASSWORD $DOCKER_REGISTRY
+  fi
+
+  if [ $1 = "images" ]; then
+    IMAGE_LABEL=$2
+    docker images
+  fi
+
+
+  if [ $1 = "push" ]; then
+    IMAGE_LABEL=$2
+    docker push $IMAGE_LABEL
+  fi
+
+  if [ $1 = "pull" ]; then
+    IMAGE_LABEL=$2
+    readarray -d / -t arr <<< $IMAGE_LABEL
+    docker pull $IMAGE_LABEL
+    docker save -o 'image.tar' $IMAGE_LABEL
+  fi
+
+  if [ $1 = "load" ]; then
+    IMAGE_LABEL=$2
+    docker load -i $2
+  fi
+fi
