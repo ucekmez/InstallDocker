@@ -1,9 +1,15 @@
 # InstallDocker
 
-##usage:
+## usage:
 
-sudo ./install-docker.sh
+sudo ./prepare -r [OPTIONS]
+sudo ./prepare help ( for a short documentation )
 
 ## notes
 
-with this script, Docker engine can be installed on any Ubuntu and Debian
+With this script, Docker engine bundle can be prepared for any kind of cpu architecture.
+
+After the bundle.tar.gz is prepared, you can send the bundle to the corresponding IoT device.
+In the device, open the tar and type the following command:
+
+$> sudo ./install

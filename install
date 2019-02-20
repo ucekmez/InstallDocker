@@ -1,0 +1,17 @@
+#!/bin/sh
+
+CURRENT_DIR=$(dirname $(readlink -f $0))
+echo $current_dir
+
+# install by copying files to /usr/bin
+sudo cp $CURRENT_DIR'/docker/'* /usr/bin/
+sudo groupadd docker
+
+# add docker usage rights to the $USER
+sudo usermod -aG docker $USER
+
+# make docker a service
+sudo cp $CURRENT_DIR'/docker.service' /etc/systemd/system/docker.service
+sudo systemctl enable docker && sudo systemctl start docker
+
+echo "docker system has been installed successfully"

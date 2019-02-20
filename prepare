@@ -1,0 +1,111 @@
+#!/bin/sh
+
+# docker version to be installed
+DOCKER_VERSION="18.06.2"
+DOCKER_COMPOSE_VERSION="1.23.2"
+ARCH="$(uname -m)"
+LOCATION="$PWD"
+HELPTEXT="
+Usage: ./prepare -r [OPTIONS]\n
+\n
+A script that prepares a bundle which can be used to install\n
+docker and docker-compose with respect to user permissions\n
+\n
+Commands:\n
+\n
+  -r :          Starts preparing the bundle for your remote device\n
+  help :        Help instructions\n
+\n
+Options:\n
+\n
+  -p :         Location of where to put installation bundle\n
+  -a :         Set target architecture. Default: x86_64 (can be found by typing 'uname -m' on remote device)\n
+"
+
+if [ "$#" = 0 ] || ([ "$#" = 1 ] && [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "help" ]); then
+  echo $HELPTEXT
+  exit
+fi
+
+while getopts ":p:a:" option
+do
+  case "${option}"
+    in
+      p) LOCATION_USER=${OPTARG};;
+      a) ARCH_USER=${OPTARG};;
+      :) NOARG=;;
+  esac
+done
+
+# this is our run procedure
+if [ "$#" -ge 1 ] && [ "$1" = "-r" ]; then
+
+  if [ ! -z "$ARCH_USER" ]; then
+    ARCH=$ARCH_USER
+  fi
+
+  # check if docker sources available
+  if [ ! -f 'src/docker-'"$ARCH"'.tgz' ]; then
+      # doker download can not be found. then download it
+      sudo apt install -y curl
+      url='https://download.docker.com/linux/static/stable/'"$ARCH"'/docker-'"$DOCKER_VERSION"'-ce.tgz'
+      echo "docker is being downloaded"
+      if [ ! -d src ]; then
+        mkdir src
+      fi
+      wget -O 'src/docker-'"$ARCH"'.tgz' $url
+  else
+      echo 'src/docker-'"$ARCH"'.tgz has been found!'
+  fi
+
+  # check if docker-compose file available
+  if [ ! -f 'src/docker-compose-'"$ARCH" ]; then
+      # doker download can not be found. then download it
+      sudo apt install -y curl
+      url='https://github.com/docker/compose/releases/download/'"$DOCKER_COMPOSE_VERSION"'/docker-compose-Linux-'"$ARCH"
+      echo "docker-compose is being downloaded"
+      wget -O 'src/docker-compose-'"$ARCH" $url
+    else
+        echo 'src/docker-compose-'"$ARCH"' has been found!'
+    fi
+
+  # we assume that now we have src/docker.tgz and docker-compose files
+  # now prepare the bundle
+  sudo apt install -y tar
+  if [ -d bundle ]; then
+    echo "bundle directory found!"
+    rm -rf bundle
+    echo "now removed..."
+  fi
+  mkdir bundle
+  tar xzvf 'src/docker-'"$ARCH"'.tgz' --directory "$PWD/bundle"
+  cp 'src/docker-compose-'"$ARCH" bundle/docker/docker-compose
+  cp docker.service bundle/docker.service
+  cp install bundle/install
+  tar -zcvf bundle.tar.gz bundle
+  rm -rf bundle
+  if [ ! -z "$LOCATION_USER" ]; then
+    LOCATION=$LOCATION_USER
+    mv bundle.tar.gz $LOCATION
+  fi
+
+  clear
+  echo "
+    docker engine bundle has been prepared successfully for $ARCH!
+    your bundle is in: $LOCATION
+    now you should
+      - send bundle.tar.gz to your IoT device with your protocol
+      - run following commands in device:
+        $> tar xzvf bundle.tar.gz
+        $> sudo ./bundle/install
+  "
+
+
+else
+  echo $HELPTEXT
+  exit
+fi
+
+
+
+#EOF
