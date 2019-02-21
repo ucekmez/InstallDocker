@@ -2,7 +2,7 @@
 
 ## usage:
 
-sudo ./prepare -r [OPTIONS]
+sudo ./prepare -r [OPTIONS] 
 sudo ./prepare help ( for a short documentation )
 
 ## notes
