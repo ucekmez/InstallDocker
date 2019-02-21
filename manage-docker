@@ -8,12 +8,24 @@ COMMAND=$1
 
 if [ "$#" -lt 1 ]; then
   echo "
-  usage:
-    manage-docker login username password  [logs you in to $DOCKER_REGISTRY]
-    manage-docker images                   [lists locally available images]
-    manage-docker push image_label         [pushes image_label to $DOCKER_REGISTRY]
-    manage-docker pull image_label         [pulls and saves image_label from $DOCKER_REGISTRY]
-  "
+  Usage: manage-docker [COMMAND] [PARAMETERS]
+
+  A script that handles docker image process
+
+  Commands:
+
+    login [username password]: logs you in to $DOCKER_REGISTRY
+    images                   : lists locally available images
+    push  [image_label]      : pushes image_label to $DOCKER_REGISTRY
+    pull  [image_label]      : pulls and saves image_label from $DOCKER_REGISTRY
+
+  Parameters:
+
+    username                 : username for repo
+    password                 : user password for repo
+    image_label              : name of the image (format: $DOCKER_REGISTRY/image_name)
+"
+
 else
 
   wget -q --spider http://google.com

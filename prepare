@@ -5,25 +5,24 @@ DOCKER_VERSION="18.06.2"
 DOCKER_COMPOSE_VERSION="1.23.2"
 ARCH="$(uname -m)"
 LOCATION="$PWD"
-HELPTEXT="
-Usage: ./prepare -r [OPTIONS]\n
-\n
-A script that prepares a bundle which can be used to install\n
-docker and docker-compose with respect to user permissions\n
-\n
-Commands:\n
-\n
-  -r :          Starts preparing the bundle for your remote device\n
-  help :        Help instructions\n
-\n
-Options:\n
-\n
-  -p :         Location of where to put installation bundle\n
-  -a :         Set target architecture. Default: x86_64 (can be found by typing 'uname -m' on remote device)\n
-"
 
 if [ "$#" = 0 ] || ([ "$#" = 1 ] && [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "help" ]); then
-  echo $HELPTEXT
+  echo "
+  Usage: ./prepare -r [OPTIONS]
+
+  A script that prepares a bundle which can be used to install
+  docker and docker-compose with respect to user permissions
+
+  Commands:
+
+    -r   : Starts preparing the bundle for your remote device
+    help : Help instructions
+
+  Options:
+
+    -p   : Location of where to put installation bundle
+    -a   : Set target architecture. Default: x86_64 (type 'uname -m' on remote device)
+"
   exit
 fi
 
@@ -103,7 +102,22 @@ if [ "$#" -ge 1 ] && [ "$1" = "-r" ]; then
 
 
 else
-  echo $HELPTEXT
+  echo "
+  Usage: ./prepare -r [OPTIONS]
+
+  A script that prepares a bundle which can be used to install
+  docker and docker-compose with respect to user permissions
+
+  Commands:
+
+    -r   : Starts preparing the bundle for your remote device
+    help : Help instructions
+
+  Options:
+
+    -p   : Location of where to put installation bundle
+    -a   : Set target architecture. Default: x86_64 (type 'uname -m' on remote device)
+"
   exit
 fi
 
