@@ -25,7 +25,7 @@ For this purpose, use *./manage-docker* script
 ## manage-docker
 In your local machine:
  - run **'./manage-docker pull image_name'** (saves your docker image as image.tar)
- - sen this tar file to your device
+ - send this tar file to your device
 
 In your device:
  - (assuming that you have already installed bundle.tar.gz)
