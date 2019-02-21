@@ -3,13 +3,13 @@
 ## usage:
 
 ```bash
-sudo ./prepare -r [OPTIONS]
-sudo ./prepare help ( for a short documentation )
+$> sudo ./prepare -r [OPTIONS]
+$> sudo ./prepare help ( for a short documentation )
 ```
 
 ## notes
 
-With this script, Docker engine bundle can be prepared for any kind of CPU architecture. 
+With this script, Docker engine bundle can be prepared for any kind of CPU architecture.
 *(possible architectures: aarch64 armel armhf ppc64le s390x x86_64)*
 
 After the bundle.tar.gz is prepared, you can send the bundle to the corresponding IoT/remote/offline device.
