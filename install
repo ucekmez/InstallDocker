@@ -2,6 +2,10 @@
 
 CURRENT_DIR=$(dirname $(readlink -f $0))
 
+# remove previously installed docker-service (if any)
+sudo systemctl stop docker
+sudo rm -rf /etc/systemd/system/docker.service
+
 # install by copying files to /usr/bin
 sudo cp $CURRENT_DIR'/docker/'* /usr/bin/
 sudo groupadd docker
@@ -14,5 +18,7 @@ sudo cp $CURRENT_DIR'/docker.service' /etc/systemd/system/docker.service
 sudo systemctl enable docker && sudo systemctl start docker
 
 sudo mv $CURRENT_DIR'/manage-docker' /usr/bin/manage-docker
-
-echo "docker system has been installed successfully"
+clear
+echo "
+  docker system has been installed successfully!
+"

@@ -14,16 +14,19 @@ if [ "$#" -lt 1 ]; then
 
   Commands:
 
-    login [username password]: logs you in to $DOCKER_REGISTRY
-    images                   : lists locally available images
-    push  [image_label]      : pushes image_label to $DOCKER_REGISTRY
-    pull  [image_label]      : pulls and saves image_label from $DOCKER_REGISTRY
+    login [username password]        : logs you in to $DOCKER_REGISTRY
+    images                           : lists locally available images (*)
+    push  [image_label]              : pushes image_label to $DOCKER_REGISTRY
+    pull  [image_label]              : pulls and saves image_label from $DOCKER_REGISTRY
+    load  [image_path] [config_file] : loads given image as a docker image (*)
 
   Parameters:
 
-    username                 : username for repo
-    password                 : user password for repo
-    image_label              : name of the image (format: $DOCKER_REGISTRY/image_name)
+    username                         : username for repo
+    password                         : user password for repo
+    image_label                      : name of the image (format: $DOCKER_REGISTRY/image_name)
+
+    (*) works on non-connected devices
 "
 
 else
@@ -39,14 +42,14 @@ else
 
     if [ $1 = "push" ]; then
       IMAGE_LABEL=$2
-      docker push $IMAGE_LABEL
+      docker push "$DOCKER_REGISTRY"'/'"$IMAGE_LABEL"
     fi
 
     if [ $1 = "pull" ]; then
       IMAGE_LABEL=$2
-      readarray -d / -t arr <<< $IMAGE_LABEL
-      docker pull $IMAGE_LABEL
-      docker save $IMAGE_LABEL | gzip -c > image.tar.gz
+      #readarray -d / -t arr <<< $IMAGE_LABEL
+      docker pull "$DOCKER_REGISTRY"'/'"$IMAGE_LABEL"
+      docker save "$DOCKER_REGISTRY"'/'"$IMAGE_LABEL" | gzip -c > "$IMAGE_LABEL"'.tar.gz'
     fi
   fi
 
@@ -57,7 +60,19 @@ else
   fi
 
   if [ $1 = "load" ]; then
-    IMAGE_LABEL=$2
-    docker load -i $2
+    IMAGE_PATH=$2
+    CONFIG_FILE=$3
+    CONFIG_FILE_NAME=$(basename $CONFIG_FILE)
+    # get image label from path (by excluding the path itself and .tar.gz extension)
+    readarray -d . -t IMAGE_LABEL <<< $IMAGE_PATH
+    docker load -i $IMAGE_PATH
+    echo "$IMAGE_LABEL"' has been loaded successfully!'
+
+    UUID="$(docker run -d "$DOCKER_REGISTRY"'/'"$IMAGE_LABEL")"
+    docker cp $CONFIG_FILE "$UUID"':/client/config/'"$CONFIG_FILE_NAME"
+
+    echo "$IMAGE_LABEL"' is running with '"$UUID"' ID!'
+
   fi
+
 fi
