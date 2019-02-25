@@ -46,7 +46,7 @@ else
       IMAGE_LABEL=$2
       readarray -d / -t arr <<< $IMAGE_LABEL
       docker pull $IMAGE_LABEL
-      docker save -o 'image.tar' $IMAGE_LABEL
+      docker save $IMAGE_LABEL | gzip -c > image.tar.gz
     fi
   fi
 
