@@ -4,7 +4,7 @@
 DOCKER_VERSION="18.06.2"
 DOCKER_COMPOSE_VERSION="1.23.2"
 ARCH="$(uname -m)"
-LOCATION="$PWD"
+LOCATION="/srv/repo"
 
 if [ "$#" = 0 ] || ([ "$#" = 1 ] && [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "help" ]); then
   echo "
@@ -22,6 +22,7 @@ if [ "$#" = 0 ] || ([ "$#" = 1 ] && [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ 
 
     -p   : Location of where to put installation bundle
     -a   : Set target architecture. Default: x86_64 (type 'uname -m' on remote device)
+           possible architectures: aarch64 armel armhf ppc64le s390x x86_64
 "
   exit
 fi
