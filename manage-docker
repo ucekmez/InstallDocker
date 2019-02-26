@@ -63,7 +63,8 @@ else
     IMAGE_PATH=$2
 
     # get image label from path (by excluding the path itself and .tar.gz extension)
-    readarray -d . -t IMAGE_LABEL <<< $IMAGE_PATH
+    IMAGE_NAME=$(basename $IMAGE_PATH)
+    readarray -d . -t IMAGE_LABEL <<< $IMAGE_NAME
     docker load -i $IMAGE_PATH
     echo "$IMAGE_LABEL"' has been loaded successfully!'
 
