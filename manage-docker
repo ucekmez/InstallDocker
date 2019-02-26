@@ -17,7 +17,7 @@ if [ "$#" -lt 1 ]; then
     login [username password]        : logs you in to $DOCKER_REGISTRY
     images                           : lists locally available images (*)
     push  [image_label]              : pushes image_label to $DOCKER_REGISTRY
-    pull  [image_label]              : pulls and saves image_label from $DOCKER_REGISTRY
+    pull  [image_label]              : pulls and saves image_label from $DOCKER_REGISTRY into /srv/repo/
     load  [image_path] [config_file] : loads given image as a docker image (*)
 
   Parameters:
@@ -49,7 +49,7 @@ else
       IMAGE_LABEL=$2
       #readarray -d / -t arr <<< $IMAGE_LABEL
       docker pull "$DOCKER_REGISTRY"'/'"$IMAGE_LABEL"
-      docker save "$DOCKER_REGISTRY"'/'"$IMAGE_LABEL" | gzip -c > "$IMAGE_LABEL"'.tar.gz'
+      docker save "$DOCKER_REGISTRY"'/'"$IMAGE_LABEL" | gzip -c > '/srv/repo/'"$IMAGE_LABEL"'.tar.gz'
     fi
   fi
 
@@ -61,15 +61,19 @@ else
 
   if [ $1 = "load" ]; then
     IMAGE_PATH=$2
-    CONFIG_FILE=$3
-    CONFIG_FILE_NAME=$(basename $CONFIG_FILE)
+
     # get image label from path (by excluding the path itself and .tar.gz extension)
     readarray -d . -t IMAGE_LABEL <<< $IMAGE_PATH
     docker load -i $IMAGE_PATH
     echo "$IMAGE_LABEL"' has been loaded successfully!'
 
     UUID="$(docker run -d "$DOCKER_REGISTRY"'/'"$IMAGE_LABEL")"
-    docker cp $CONFIG_FILE "$UUID"':/client/config/'"$CONFIG_FILE_NAME"
+
+    if [ ! -z "$3" ]; then
+      CONFIG_FILE=$3
+      CONFIG_FILE_NAME=$(basename $CONFIG_FILE)
+      docker cp $CONFIG_FILE "$UUID"':/client/config/'"$CONFIG_FILE_NAME"
+    fi
 
     echo "$IMAGE_LABEL"' is running with '"$UUID"' ID!'
 
