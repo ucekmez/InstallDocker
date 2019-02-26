@@ -85,6 +85,8 @@ if [ "$#" -ge 1 ] && [ "$1" = "-r" ]; then
   cp install bundle/install
   tar -zcvf bundle.tar.gz bundle
   rm -rf bundle
+  sudo mkdir $LOCATION
+  sudo mv bundle.tar.gz $LOCATION
   if [ ! -z "$LOCATION_USER" ]; then
     LOCATION=$LOCATION_USER
     mv bundle.tar.gz $LOCATION
